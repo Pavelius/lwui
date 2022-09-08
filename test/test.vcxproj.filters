@@ -1,6 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <Filter Include="Logic">
+      <UniqueIdentifier>{058c1386-4743-4921-9200-eb6eb12cf4ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{b2e7b698-544b-4c6b-9aee-f38596d0e529}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Locale">
+      <UniqueIdentifier>{0234f7b8-1903-404d-9741-f9c04d71d190}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="errors.txt">
+      <Filter>Data</Filter>
+    </Text>
+    <Text Include="locale\ru\Names.txt">
+      <Filter>Locale</Filter>
+    </Text>
   </ItemGroup>
 </Project>

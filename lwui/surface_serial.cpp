@@ -1,6 +1,6 @@
 ﻿#include "crt.h"
-#include "draw.h"
 #include "io_stream.h"
+#include "ui.h"
 
 #pragma pack(push)
 #pragma pack(1)
@@ -29,7 +29,7 @@ struct info {
 }
 #pragma pack(pop)
 
-void draw::write(const char* url, unsigned char* bits, int width, int height, int bpp, int scanline, color* pallette) {
+void ui::write(const char* url, unsigned char* bits, int width, int height, int bpp, int scanline, color* pallette) {
 	bmp::header bmf = {0};
 	bmp::info bmi = {0};
 	//
@@ -75,15 +75,15 @@ void draw::write(const char* url, unsigned char* bits, int width, int height, in
 	}
 }
 
-void draw::surface::write(const char* url, color* pallette) {
-	draw::write(url, bits, width, height, bpp, 0, pallette);
+void ui::surface::write(const char* url, color* pallette) {
+	ui::write(url, bits, width, height, bpp, 0, pallette);
 }
 
-draw::surface::surface(const char* url, color* pallette) :surface() {
+ui::surface::surface(const char* url, color* pallette) :surface() {
 	read(url, pallette);
 }
 
-bool draw::surface::read(const char* url, color* pallette, int need_bpp) {
+bool ui::surface::read(const char* url, color* pallette, int need_bpp) {
 	unsigned size;
 	resize(0, 0, 0, true);
 	unsigned char* pin = (unsigned char*)loadb(url, (int*)&size);
@@ -106,7 +106,7 @@ bool draw::surface::read(const char* url, color* pallette, int need_bpp) {
 	return result;
 }
 
-static struct bmp_bitmap_plugin : public draw::surface::plugin {
+static struct bmp_bitmap_plugin : public ui::surface::plugin {
 
 	bmp_bitmap_plugin() : plugin("bmp", "*.bmp") {
 	}

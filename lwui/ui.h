@@ -110,7 +110,7 @@ extern sprite*			h3;
 extern sprite*			icons;
 extern int				border, padding;
 }
-namespace draw {
+namespace ui {
 struct hoti {
 	enum cursor			cursor; // set this mouse cursor
 	unsigned			key; // if pressed key or mouse this field has key
@@ -177,8 +177,8 @@ extern fnevent          pbeforemodal, pleavemodal, psetfocus;
 struct rectpush {
 	point				caret;
 	int					width, height;
-	constexpr rectpush() : caret(draw::caret), width(draw::width), height(draw::height) {}
-	~rectpush() { draw::caret = caret; draw::width = width; draw::height = height; }
+	constexpr rectpush() : caret(ui::caret), width(ui::width), height(ui::height) {}
+	~rectpush() { ui::caret = caret; ui::width = width; ui::height = height; }
 };
 int						aligned(int x, int width, unsigned state, int string_width);
 int						alignedh(const rect& rc, const char* string, unsigned state);
@@ -264,7 +264,8 @@ void					updatewindow();
 void					write(const char* url, unsigned char* bits, int width, int height, int bpp, int scanline, color* pallette);
 void					vertical(fnevent proc);
 }
-namespace draw {
+namespace ui {
+int application(fnevent proc, fnevent initializing);
 void breakmodal(long result);
 bool button(const char* title, unsigned key, fnbutton proc, bool vertical = true);
 void buttoncancel();
@@ -285,7 +286,7 @@ void setneedupdate();
 void setnext(fnevent v);
 void start();
 }
-namespace draw {
+namespace ui {
 bool isclipped(int size);
 void setposct();
 void setposld();

@@ -44,7 +44,7 @@ public:
 	void				remove(int index) { elements.remove(index, 1); }
 	void				sort();
 };
-namespace draw {
+namespace ui {
 void information(const char* format, ...);
 void output(const char* format, ...);
 void pause();

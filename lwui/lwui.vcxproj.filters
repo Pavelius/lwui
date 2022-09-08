@@ -105,13 +105,13 @@
     <ClCompile Include="win_time.cpp">
       <Filter>Platform</Filter>
     </ClCompile>
-    <ClCompile Include="draw.cpp">
+    <ClCompile Include="ui.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="draw_text.cpp">
+    <ClCompile Include="ui_text.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="draw_textf.cpp">
+    <ClCompile Include="ui_textf.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
     <ClCompile Include="sprite_util.cpp">
@@ -119,6 +119,18 @@
     </ClCompile>
     <ClCompile Include="font_util.cpp">
       <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_application.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_theme.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="widget.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_answers.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +221,7 @@
     <ClInclude Include="win.h">
       <Filter>Platform</Filter>
     </ClInclude>
-    <ClInclude Include="draw.h">
+    <ClInclude Include="ui.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="sprite_util.h">
@@ -217,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="font_util.h">
       <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="widget.h">
+      <Filter>Support</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

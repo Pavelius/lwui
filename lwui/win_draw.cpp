@@ -1,8 +1,8 @@
 #include "crt.h"
-#include "draw.h"
+#include "ui.h"
 #include "win.h"
 
-using namespace draw;
+using namespace ui;
 
 #pragma pack(push)
 #pragma pack(1)
@@ -96,7 +96,7 @@ static int handle(MSG& msg) {
 		TrackMouseEvent(&tm);
 		hot.mouse.x = LOWORD(msg.lParam);
 		hot.mouse.y = HIWORD(msg.lParam);
-		if(draw::dragactive())
+		if(ui::dragactive())
 			return MouseMove;
 		if(hot.mouse.in(sys_static_area))
 			return InputNoUpdate;
@@ -184,23 +184,23 @@ static LRESULT CALLBACK WndProc(HWND hwnd, unsigned uMsg, WPARAM wParam, LPARAM 
 	MSG msg;
 	switch(uMsg) {
 	case WM_ERASEBKGND:
-		if(draw::canvas) {
+		if(ui::canvas) {
 			RECT rc; GetClientRect(hwnd, &rc);
 			video_descriptor.bmp.bmiHeader.biSize = sizeof(video_descriptor.bmp.bmiHeader);
-			video_descriptor.bmp.bmiHeader.biWidth = draw::canvas->width;
-			video_descriptor.bmp.bmiHeader.biHeight = -draw::canvas->height;
-			video_descriptor.bmp.bmiHeader.biBitCount = draw::canvas->bpp;
+			video_descriptor.bmp.bmiHeader.biWidth = ui::canvas->width;
+			video_descriptor.bmp.bmiHeader.biHeight = -ui::canvas->height;
+			video_descriptor.bmp.bmiHeader.biBitCount = ui::canvas->bpp;
 			video_descriptor.bmp.bmiHeader.biPlanes = 1;
-			if(rc.right != draw::canvas->width || rc.bottom != draw::canvas->height)
+			if(rc.right != ui::canvas->width || rc.bottom != ui::canvas->height)
 				StretchDIBits((void*)wParam,
 					0, 0, rc.right, rc.bottom,
-					0, 0, draw::canvas->width, draw::canvas->height,
-					draw::canvas->bits, &video_descriptor.bmp, DIB_RGB_COLORS, SRCCOPY);
+					0, 0, ui::canvas->width, ui::canvas->height,
+					ui::canvas->bits, &video_descriptor.bmp, DIB_RGB_COLORS, SRCCOPY);
 			else
 				SetDIBitsToDevice((void*)wParam,
 					0, 0, rc.right, rc.bottom,
-					0, 0, 0, draw::canvas->height,
-					draw::canvas->bits, &video_descriptor.bmp, DIB_RGB_COLORS);
+					0, 0, 0, ui::canvas->height,
+					ui::canvas->bits, &video_descriptor.bmp, DIB_RGB_COLORS);
 		}
 		return 1;
 	case WM_CLOSE:
@@ -239,7 +239,7 @@ static const char* register_class(const char* class_name) {
 	return class_name;
 }
 
-void draw::getwindowpos(point& pos, point& size, unsigned* flags) {
+void ui::getwindowpos(point& pos, point& size, unsigned* flags) {
 	RECT rc;
 	GetClientRect(hwnd, &rc);
 	size.x = (short)(rc.right - rc.left);
@@ -261,7 +261,7 @@ void draw::getwindowpos(point& pos, point& size, unsigned* flags) {
 	}
 }
 
-void draw::updatewindow() {
+void ui::updatewindow() {
 	if(!hwnd)
 		return;
 	if(!IsWindowVisible(hwnd))
@@ -270,43 +270,37 @@ void draw::updatewindow() {
 	UpdateWindow(hwnd);
 }
 
-void draw::syscursor(bool enable) {
+void ui::syscursor(bool enable) {
 	ShowCursor(enable ? 1 : 0);
 }
 
-void draw::create(int x, int y, int width, int height, unsigned flags, int bpp) {
-	if(!bpp)
-		bpp = draw::canvas->bpp;
-	if(!width)
-		width = (GetSystemMetrics(SM_CXFULLSCREEN) / 3) * 2;
-	if(!height)
-		height = (GetSystemMetrics(SM_CYFULLSCREEN) / 3) * 2;
-	// custom
+void ui::create(int x, int y, int width, int height, unsigned flags, int bpp) {
+	// Custom flags
 	unsigned dwStyle = WS_CAPTION | WS_SYSMENU; // Windows Style;
-	if(flags&WFResize)
+	if(flags & WFResize)
 		dwStyle |= WS_THICKFRAME;
 	else
 		dwStyle |= WS_BORDER;
-	if(flags&WFMinmax) {
+	if(flags & WFMinmax) {
 		dwStyle |= WS_MINIMIZEBOX;
-		if(flags&WFResize)
+		if(flags & WFResize)
 			dwStyle |= WS_MAXIMIZEBOX;
 	}
 	RECT MinimumRect = {0, 0, width, height};
 	AdjustWindowRectEx(&MinimumRect, dwStyle, 0, 0);
-	minimum.x = 800;
-	if(minimum.x > width)
-		minimum.x = width;
-	minimum.y = 600;
-	if(minimum.y > height)
-		minimum.y = height;
-	if(x == -1)
-		x = (GetSystemMetrics(SM_CXFULLSCREEN) - minimum.x) / 2;
-	if(y == -1)
-		y = (GetSystemMetrics(SM_CYFULLSCREEN) - minimum.y) / 2;
-	// Update current surface
-	if(draw::canvas)
-		draw::canvas->resize(width, height, bpp, true);
+	auto window_width = MinimumRect.right - MinimumRect.left;
+	auto window_height = MinimumRect.bottom - MinimumRect.top;
+	// Positions
+	if(!bpp)
+		bpp = ui::canvas->bpp;
+	if(x==-1)
+		x = (GetSystemMetrics(SM_CXFULLSCREEN) - window_width) / 2;
+	if(y==-1)
+		y = (GetSystemMetrics(SM_CYFULLSCREEN) - window_height) / 2;
+	minimum.x = width;
+	minimum.y = height;
+	if(ui::canvas)
+		ui::canvas->resize(width, height, bpp, true);
 	setclip();
 	// Create The Window
 	hwnd = CreateWindowExA(0, register_class("CFaceWindow"), 0, dwStyle,
@@ -345,7 +339,7 @@ static unsigned handle_event(unsigned m) {
 	return m;
 }
 
-void draw::doredraw() {
+void ui::doredraw() {
 	MSG	msg;
 	updatewindow();
 	if(!hwnd)
@@ -357,7 +351,7 @@ void draw::doredraw() {
 	}
 }
 
-int draw::rawinput() {
+int ui::rawinput() {
 	MSG	msg;
 	updatewindow();
 	if(!hwnd)
@@ -376,11 +370,11 @@ int draw::rawinput() {
 	return 0;
 }
 
-void draw::setcaption(const char* string) {
+void ui::setcaption(const char* string) {
 	SetWindowTextA(hwnd, string);
 }
 
-void draw::settimer(unsigned milleseconds) {
+void ui::settimer(unsigned milleseconds) {
 	if(milleseconds)
 		SetTimer(hwnd, InputTimer, milleseconds, 0);
 	else

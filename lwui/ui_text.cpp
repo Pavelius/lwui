@@ -1,4 +1,4 @@
-#include "draw.h"
+#include "ui.h"
 
 inline short* fwidth(const sprite* font) {
 	return (short*)((char*)font + font->size - font->count * sizeof(short));
@@ -8,19 +8,19 @@ inline int wsymbol(const sprite* font, unsigned u) {
 	return (u <= 0x20) ? 't' - 0x21 : font->glyph(u);
 }
 
-int draw::textw(int sym) {
+int ui::textw(int sym) {
 	if(!font)
 		return 0;
 	return fwidth(font)[wsymbol(font, sym)];
 }
 
-int draw::textw(const sprite* font) {
+int ui::textw(const sprite* font) {
 	if(!font)
 		return 0;
 	return fwidth(font)[wsymbol(font, 'A')];
 }
 
-void draw::glyph(int sym, unsigned flags) {
+void ui::glyph(int sym, unsigned flags) {
 	static unsigned char koeff[] = {128, 160};
 	int id = font->glyph(sym);
 	if(sym >= 0x21) {
@@ -34,7 +34,7 @@ void draw::glyph(int sym, unsigned flags) {
 	}
 }
 
-int draw::texth() {
+int ui::texth() {
 	if(!font)
 		return 0;
 	return font->height;

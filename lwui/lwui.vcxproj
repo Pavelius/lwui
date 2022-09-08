@@ -152,9 +152,11 @@
     <ClCompile Include="datasource.cpp" />
     <ClCompile Include="datetime.cpp" />
     <ClCompile Include="dice.cpp" />
-    <ClCompile Include="draw.cpp" />
-    <ClCompile Include="draw_text.cpp" />
-    <ClCompile Include="draw_textf.cpp" />
+    <ClCompile Include="ui.cpp" />
+    <ClCompile Include="ui_answers.cpp" />
+    <ClCompile Include="ui_application.cpp" />
+    <ClCompile Include="ui_text.cpp" />
+    <ClCompile Include="ui_textf.cpp" />
     <ClCompile Include="font_util.cpp" />
     <ClCompile Include="gender.cpp" />
     <ClCompile Include="io_stream.cpp" />
@@ -172,6 +174,8 @@
     <ClCompile Include="stringbuilder.cpp" />
     <ClCompile Include="surface_serial.cpp" />
     <ClCompile Include="szdup.cpp" />
+    <ClCompile Include="ui_theme.cpp" />
+    <ClCompile Include="widget.cpp" />
     <ClCompile Include="win_draw.cpp" />
     <ClCompile Include="win_io_file.cpp" />
     <ClCompile Include="win_time.cpp" />
@@ -189,7 +193,7 @@
     <ClInclude Include="datasource.h" />
     <ClInclude Include="datetime.h" />
     <ClInclude Include="dice.h" />
-    <ClInclude Include="draw.h" />
+    <ClInclude Include="ui.h" />
     <ClInclude Include="flagable.h" />
     <ClInclude Include="font_util.h" />
     <ClInclude Include="gender.h" />
@@ -208,6 +212,7 @@
     <ClInclude Include="string.h" />
     <ClInclude Include="stringact.h" />
     <ClInclude Include="stringbuilder.h" />
+    <ClInclude Include="widget.h" />
     <ClInclude Include="win.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
