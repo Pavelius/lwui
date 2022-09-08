@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="main_util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="errors.txt" />

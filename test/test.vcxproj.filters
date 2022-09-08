@@ -15,6 +15,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="main_util.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="errors.txt">

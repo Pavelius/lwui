@@ -11,7 +11,10 @@ static void starting() {
 	ui::scene(main_scene);
 }
 
+void main_util();
+
 int main(int argc, char *argv[]) {
+	main_util();
 	return ui::application(starting, 0);
 }
 
