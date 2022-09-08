@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Support">
+      <UniqueIdentifier>{a0bc8ce8-231b-4ea1-9f6e-2256debc958c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{84cb4196-8ea4-43f2-b702-351b43add60b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{912c247e-3d66-4df4-b7b9-179ef2427d3b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="answers.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="archive.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="bsreq.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="bstream.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="color.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="crt.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="crt_file.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="crt_translate.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="dataset.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="datasource.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="datetime.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="dice.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="font_util.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="gender.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="io_stream.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="moveable.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="point.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="requisit.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_dynamic.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="screenshoot.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="script.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite_util.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="string.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="stringact.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="stringbuilder.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="surface_serial.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="szdup.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="win_draw.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="win_io_file.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="win_time.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="draw.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="draw_text.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="draw_textf.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="answers.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="archive.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="bsreq.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="bstream.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="cmap.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="crt.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="datamap.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="dataset.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="datasource.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="datetime.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="dice.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="flagable.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="font_util.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="gender.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="io_stream.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="moveable.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="point.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="pointl.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="posable.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="rect.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="requisit.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="screenshoot.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="script.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite_util.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="string.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="stringact.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="stringbuilder.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="win.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="draw.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
