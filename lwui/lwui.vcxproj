@@ -166,7 +166,6 @@
     <ClCompile Include="resource_dynamic.cpp" />
     <ClCompile Include="screenshoot.cpp" />
     <ClCompile Include="script.cpp" />
-    <ClCompile Include="sprite_util.cpp" />
     <ClCompile Include="string.cpp" />
     <ClCompile Include="stringact.cpp" />
     <ClCompile Include="stringbuilder.cpp" />
@@ -204,7 +203,6 @@
     <ClInclude Include="requisit.h" />
     <ClInclude Include="screenshoot.h" />
     <ClInclude Include="script.h" />
-    <ClInclude Include="sprite_util.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="stringact.h" />
     <ClInclude Include="stringbuilder.h" />

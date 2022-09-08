@@ -117,9 +117,6 @@
     <ClCompile Include="draw_textf.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="sprite_util.cpp">
-      <Filter>Util</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="answers.h">
@@ -214,9 +211,6 @@
     </ClInclude>
     <ClInclude Include="draw.h">
       <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="sprite_util.h">
-      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
