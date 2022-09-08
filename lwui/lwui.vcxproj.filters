@@ -10,6 +10,9 @@
     <Filter Include="Interface">
       <UniqueIdentifier>{912c247e-3d66-4df4-b7b9-179ef2427d3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{30e7bae3-a86a-4bd8-b47e-54f311232baf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="answers.cpp">
@@ -81,9 +84,6 @@
     <ClCompile Include="script.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="sprite_util.cpp">
-      <Filter>Support</Filter>
-    </ClCompile>
     <ClCompile Include="string.cpp">
       <Filter>Support</Filter>
     </ClCompile>
@@ -116,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="draw_textf.cpp">
       <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite_util.cpp">
+      <Filter>Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -197,9 +200,6 @@
     <ClInclude Include="script.h">
       <Filter>Support</Filter>
     </ClInclude>
-    <ClInclude Include="sprite_util.h">
-      <Filter>Support</Filter>
-    </ClInclude>
     <ClInclude Include="string.h">
       <Filter>Support</Filter>
     </ClInclude>
@@ -214,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="draw.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite_util.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
