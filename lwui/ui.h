@@ -184,7 +184,6 @@ int						aligned(int x, int width, unsigned state, int string_width);
 int						alignedh(const rect& rc, const char* string, unsigned state);
 void					circle(int size);
 void					circlef(int size);
-void					create(int x, int y, int width, int height, unsigned flags, int bpp);
 bool					dragactive(const void* p);
 bool					dragactive();
 void					dragbegin(const void* p);
@@ -215,6 +214,7 @@ void					imager(int x, int y, const sprite* p, int id, int radius);
 void					key2str(stringbuilder& sb, int key);
 void					line(int x, int y); // Draw line
 void					linet(int x, int y);
+void					loadposition(rect& v);
 void					paintstart();
 void					paintfinish();
 void					pixel(int x, int y);
@@ -227,6 +227,7 @@ void					rectf(); // Draw rectangle area. Right and bottom side is one pixel les
 void					rectfe(rect rc, int radius);
 void					rectx();
 void					rectfocus();
+void					saveposition(rect& v);
 void					set(int x, int y);
 void					setcaption(const char* string);
 void					setclip(rect rc);

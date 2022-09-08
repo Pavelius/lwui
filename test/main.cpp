@@ -3,7 +3,8 @@
 #include "ui.h"
 
 static void main_scene() {
-
+	ui::caret = {10, 10};
+	ui::text("Standart string data");
 }
 
 static void starting() {

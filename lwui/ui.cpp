@@ -2501,14 +2501,14 @@ void ui::setneedupdate() {
 	hot.key = InputNeedUpdate;
 }
 
+extern void create_platform_window();
+
 void ui::initialize(const char* title) {
-	ui::width = 640 * 2;
-	ui::height = 360 * 2;
-	ui::font = metrics::font;
-	ui::fore = colors::text;
-	ui::fore_stroke = colors::border;
-	ui::create(-1, -1, ui::width, ui::height, 0, 32);
-	ui::setcaption(title);
+	font = metrics::font;
+	fore = colors::text;
+	fore_stroke = colors::border;
+	create_platform_window();
+	setcaption(title);
 }
 
 void ui::paintstart() {
@@ -2626,4 +2626,14 @@ void ui::set(int x, int y) {
 bool ui::isclipped(int size) {
 	rect rc = {caret.x - size, caret.y - size, caret.x + size, caret.y + size};
 	return !rc.intersect(clipping);
+}
+
+void ui::saveposition(rect& v) {
+	v.x1 = caret.x; v.y1 = caret.y;
+	v.x2 = v.x1 + width; v.y2 = v.y1 + height;
+}
+
+void ui::loadposition(rect& v) {
+	caret.x = v.x1; caret.y = v.y1;
+	width = v.width(); height = v.height();
 }

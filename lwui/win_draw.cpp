@@ -2,6 +2,8 @@
 #include "ui.h"
 #include "win.h"
 
+#define ZOOM 2
+
 using namespace ui;
 
 #pragma pack(push)
@@ -21,40 +23,40 @@ static struct sys_key_mapping {
 	unsigned    key;
 	unsigned    id;
 } sys_key_mapping_data[] = {{VK_CONTROL, Ctrl},
-{VK_MENU, Alt},
-{VK_SHIFT, Shift},
-{VK_LEFT, KeyLeft},
-{VK_RIGHT, KeyRight},
-{VK_UP, KeyUp},
-{VK_DOWN, KeyDown},
-{VK_PRIOR, KeyPageUp},
-{VK_NEXT, KeyPageDown},
-{VK_HOME, KeyHome},
-{VK_END, KeyEnd},
-{VK_BACK, KeyBackspace},
-{VK_DELETE, KeyDelete},
-{VK_RETURN, KeyEnter},
-{VK_ESCAPE, KeyEscape},
-{VK_SPACE, KeySpace},
-{VK_TAB, KeyTab},
-{VK_F1, F1},
-{VK_F2, F2},
-{VK_F3, F3},
-{VK_F4, F4},
-{VK_F5, F5},
-{VK_F6, F6},
-{VK_F7, F7},
-{VK_F8, F8},
-{VK_F9, F9},
-{VK_F10, F10},
-{VK_F11, F11},
-{VK_F12, F12},
-{VK_MULTIPLY, (unsigned)'*'},
-{VK_DIVIDE, (unsigned)'/'},
-{VK_ADD, (unsigned)'+'},
-{VK_SUBTRACT, (unsigned)'-'},
-{VK_OEM_COMMA, (unsigned)','},
-{VK_OEM_PERIOD, (unsigned)'.'},
+	{VK_MENU, Alt},
+	{VK_SHIFT, Shift},
+	{VK_LEFT, KeyLeft},
+	{VK_RIGHT, KeyRight},
+	{VK_UP, KeyUp},
+	{VK_DOWN, KeyDown},
+	{VK_PRIOR, KeyPageUp},
+	{VK_NEXT, KeyPageDown},
+	{VK_HOME, KeyHome},
+	{VK_END, KeyEnd},
+	{VK_BACK, KeyBackspace},
+	{VK_DELETE, KeyDelete},
+	{VK_RETURN, KeyEnter},
+	{VK_ESCAPE, KeyEscape},
+	{VK_SPACE, KeySpace},
+	{VK_TAB, KeyTab},
+	{VK_F1, F1},
+	{VK_F2, F2},
+	{VK_F3, F3},
+	{VK_F4, F4},
+	{VK_F5, F5},
+	{VK_F6, F6},
+	{VK_F7, F7},
+	{VK_F8, F8},
+	{VK_F9, F9},
+	{VK_F10, F10},
+	{VK_F11, F11},
+	{VK_F12, F12},
+	{VK_MULTIPLY, (unsigned)'*'},
+	{VK_DIVIDE, (unsigned)'/'},
+	{VK_ADD, (unsigned)'+'},
+	{VK_SUBTRACT, (unsigned)'-'},
+	{VK_OEM_COMMA, (unsigned)','},
+	{VK_OEM_PERIOD, (unsigned)'.'},
 };
 
 static int tokey(unsigned key) {
@@ -94,8 +96,8 @@ static int handle(MSG& msg) {
 		tm.hwndTrack = hwnd;
 		tm.dwHoverTime = HOVER_DEFAULT;
 		TrackMouseEvent(&tm);
-		hot.mouse.x = LOWORD(msg.lParam);
-		hot.mouse.y = HIWORD(msg.lParam);
+		hot.mouse.x = LOWORD(msg.lParam) / ZOOM;
+		hot.mouse.y = HIWORD(msg.lParam) / ZOOM;
 		if(ui::dragactive())
 			return MouseMove;
 		if(hot.mouse.in(sys_static_area))
@@ -108,10 +110,10 @@ static int handle(MSG& msg) {
 			break;
 		GetCursorPos(&pt);
 		ScreenToClient(msg.hwnd, &pt);
-		hot.mouse.x = (short)pt.x;
+		hot.mouse.x = (short)pt.x / ZOOM;
 		if(hot.mouse.x < 0)
 			hot.mouse.x = -10000;
-		hot.mouse.y = (short)pt.y;
+		hot.mouse.y = (short)pt.y / ZOOM;
 		if(hot.mouse.y < 0)
 			hot.mouse.y = -10000;
 		return MouseMove;
@@ -239,28 +241,6 @@ static const char* register_class(const char* class_name) {
 	return class_name;
 }
 
-void ui::getwindowpos(point& pos, point& size, unsigned* flags) {
-	RECT rc;
-	GetClientRect(hwnd, &rc);
-	size.x = (short)(rc.right - rc.left);
-	size.y = (short)(rc.bottom - rc.top);
-	GetWindowRect(hwnd, &rc);
-	pos.x = (short)rc.left;
-	pos.y = (short)rc.top;
-	if(flags) {
-		WINDOWPLACEMENT wp;
-		GetWindowPlacement(hwnd, &wp);
-		*flags = 0;
-		auto wf = GetWindowLongA(hwnd, GWL_STYLE);
-		if(wp.showCmd==SW_SHOWMAXIMIZED)
-			*flags |= WFMaximized;
-		if(wf&WS_THICKFRAME)
-			*flags |= WFResize;
-		if(wf&WS_MINIMIZEBOX)
-			*flags |= WFMinmax;
-	}
-}
-
 void ui::updatewindow() {
 	if(!hwnd)
 		return;
@@ -274,51 +254,32 @@ void ui::syscursor(bool enable) {
 	ShowCursor(enable ? 1 : 0);
 }
 
-void ui::create(int x, int y, int width, int height, unsigned flags, int bpp) {
-	// Custom flags
-	unsigned dwStyle = WS_CAPTION | WS_SYSMENU; // Windows Style;
-	if(flags & WFResize)
-		dwStyle |= WS_THICKFRAME;
-	else
-		dwStyle |= WS_BORDER;
-	if(flags & WFMinmax) {
-		dwStyle |= WS_MINIMIZEBOX;
-		if(flags & WFResize)
-			dwStyle |= WS_MAXIMIZEBOX;
-	}
-	RECT MinimumRect = {0, 0, width, height};
+void create_platform_window() {
+	unsigned dwStyle = WS_CAPTION | WS_SYSMENU | WS_BORDER; // Windows Style;
+	auto client_width = width * ZOOM;
+	auto client_height = height * ZOOM;
+	RECT MinimumRect = {0, 0, client_width, client_height};
 	AdjustWindowRectEx(&MinimumRect, dwStyle, 0, 0);
 	auto window_width = MinimumRect.right - MinimumRect.left;
 	auto window_height = MinimumRect.bottom - MinimumRect.top;
-	// Positions
-	if(!bpp)
-		bpp = ui::canvas->bpp;
-	if(x==-1)
-		x = (GetSystemMetrics(SM_CXFULLSCREEN) - window_width) / 2;
-	if(y==-1)
-		y = (GetSystemMetrics(SM_CYFULLSCREEN) - window_height) / 2;
-	minimum.x = width;
-	minimum.y = height;
+	auto x = (GetSystemMetrics(SM_CXFULLSCREEN) - window_width) / 2;
+	auto y = (GetSystemMetrics(SM_CYFULLSCREEN) - window_height) / 2;
+	minimum.x = client_width;
+	minimum.y = client_height;
 	if(ui::canvas)
-		ui::canvas->resize(width, height, bpp, true);
+		ui::canvas->resize(width, height, 32, true);
 	setclip();
 	// Create The Window
-	hwnd = CreateWindowExA(0, register_class("CFaceWindow"), 0, dwStyle,
-		x, y,
-		MinimumRect.right - MinimumRect.left,
-		MinimumRect.bottom - MinimumRect.top,
-		0, 0, GetModuleHandleA(0), 0);
+	hwnd = CreateWindowExA(0, register_class("LWUIWindow"), 0, dwStyle,
+		x, y, window_width, window_height, 0, 0, GetModuleHandleA(0), 0);
 	if(!hwnd)
 		return;
-	int cmdShow = SW_SHOWNORMAL;
-	if(flags&WFMaximized)
-		cmdShow = SW_SHOWMAXIMIZED;
-	ShowWindow(hwnd, cmdShow);
+	ShowWindow(hwnd, SW_SHOWNORMAL);
 	// Update mouse coordinates
 	POINT pt; GetCursorPos(&pt);
 	ScreenToClient(hwnd, &pt);
-	hot.mouse.x = (short)pt.x;
-	hot.mouse.y = (short)pt.y;
+	hot.mouse.x = (short)(pt.x / ZOOM);
+	hot.mouse.y = (short)(pt.y / ZOOM);
 }
 
 static unsigned handle_event(unsigned m) {
@@ -332,7 +293,7 @@ static unsigned handle_event(unsigned m) {
 	} else if(m == InputUpdate) {
 		if(canvas) {
 			RECT rc; GetClientRect(hwnd, &rc);
-			canvas->resize(rc.right - rc.left, rc.bottom - rc.top, 32, true);
+			canvas->resize((rc.right - rc.left) / ZOOM, (rc.bottom - rc.top) / ZOOM, 32, true);
 			setclip();
 		}
 	}
