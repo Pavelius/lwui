@@ -36,8 +36,24 @@ static void statusbar() {
 	height -= dy;
 }
 
+static void toolbar() {
+	auto push_height = height;
+	auto push_width = width;
+	auto push_caret = caret;
+	auto offset = metrics::border + metrics::padding;
+	auto dy = 32 + offset * 2; height = dy;
+	fillform();
+	setoffset(offset, offset);
+	caret = push_caret;
+	width = push_width;
+	height = push_height;
+	caret.y += dy; height -= dy;
+	strokeline();
+}
+
 static void background() {
 	statusbar();
+	toolbar();
 	fillwindow();
 }
 
