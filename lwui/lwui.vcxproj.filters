@@ -51,9 +51,6 @@
     <ClCompile Include="dice.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="font_util.cpp">
-      <Filter>Support</Filter>
-    </ClCompile>
     <ClCompile Include="gender.cpp">
       <Filter>Support</Filter>
     </ClCompile>
@@ -117,6 +114,12 @@
     <ClCompile Include="draw_textf.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="sprite_util.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="font_util.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="answers.h">
@@ -156,9 +159,6 @@
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="flagable.h">
-      <Filter>Support</Filter>
-    </ClInclude>
-    <ClInclude Include="font_util.h">
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="gender.h">
@@ -211,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="draw.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite_util.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="font_util.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
