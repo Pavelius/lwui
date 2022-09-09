@@ -48,7 +48,6 @@ rect				sys_static_area;
 static ui::surface default_surface;
 ui::surface*		ui::canvas = &default_surface;
 point				ui::caret, ui::camera, ui::tips_caret, ui::tips_size;
-bool			    line_antialiasing = true;
 // Drag
 static const void*	drag_object;
 point				ui::dragmouse;
@@ -970,7 +969,7 @@ void ui::line(int xt, int yt) {
 	} else if(caret.y == y1) {
 		if(correct(x0, y0, x1, y1, clipping, false))
 			set32x(canvas->ptr(x0, y0), canvas->scanline, x1 - x0 + 1, 1);
-	} else if(line_antialiasing) {
+	} else {
 		int x0 = caret.x, y0 = caret.y;
 		int dx = iabs(x1 - x0), sx = x0 < x1 ? 1 : -1;
 		int dy = iabs(y1 - y0), sy = y0 < y1 ? 1 : -1;
@@ -991,22 +990,6 @@ void ui::line(int xt, int yt) {
 					break;
 				if(dx - e2 < ed)
 					pixel(x2 + sx, y0, alpha * (dx - e2) / ed);
-				err += dx; y0 += sy;
-			}
-		}
-	} else {
-		int dx = iabs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-		int dy = -iabs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-		int err = dx + dy, e2;
-		for(;;) {
-			pixel(x0, y0, alpha);
-			e2 = 2 * err;
-			if(e2 >= dy) {
-				if(x0 == x1) break;
-				err += dy; x0 += sx;
-			}
-			if(e2 <= dx) {
-				if(y0 == y1) break;
 				err += dx; y0 += sy;
 			}
 		}

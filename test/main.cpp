@@ -7,7 +7,7 @@ using namespace ui;
 static void main_scene() {
 	caret.x += metrics::padding;
 	caret.y += metrics::padding;
-	text("Standart string data");
+	text("Standart string data and nothing to do");
 	caret.y += texth() + metrics::padding;
 	width = 100; height = 18;
 	rectb();
@@ -18,6 +18,10 @@ static void main_scene() {
 		image(gres("portm", "art/images"), i, 0);
 		caret.x += width;
 	}
+	caret.x = 100; caret.y = 80;
+	line(200, 300);
+	caret.x = 200; caret.y = 100;
+	circle(32);
 }
 
 static void starting() {
@@ -27,7 +31,7 @@ static void starting() {
 void main_util();
 
 int main(int argc, char *argv[]) {
-	//main_util();
+	main_util();
 	return application(starting, 0);
 }
 
