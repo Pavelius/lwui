@@ -1,10 +1,25 @@
 #include "crt.h"
 #include "log.h"
 #include "ui.h"
+#include "ui_application.h"
 
 using namespace ui;
 
-static bool ishilite(const void* current_hilite) {
+static void getstatus(const void* object, stringbuilder& sb) {
+	auto pm = gres("monsters", "art/objects");
+	if(object >= pm && object <= pm->ptr(pm->size)) {
+		auto p = (sprite::frame*)object;
+		auto fi = p - pm->frames;
+		sb.add("Спрайт %1i, размер %2ix%3i", fi, p->sx, p->sy);
+	}
+}
+
+static void paint_hilite() {
+	if(hot.hilite) {
+		rectpush push;
+		loadposition(hot.hilite);
+		rectb();
+	}
 }
 
 static void paint_monsters() {
@@ -16,7 +31,12 @@ static void paint_monsters() {
 		if(caret.y + st >= clipping.y1) {
 			caret.x = push_caret.x;
 			for(auto x = 0; x < dx; x++) {
-				image(pi, x + y * dx, 0);
+				auto fi = x + y * dx;
+				image(pi, fi, 0);
+				if(ishilite(st / 2)) {
+					auto& f = pi->get(fi);
+					hilite_object = &f;
+				}
 				caret.x += 32;
 			}
 		}
@@ -41,25 +61,18 @@ static void main_scene() {
 	caret.x += metrics::padding;
 	caret.y += metrics::padding;
 	auto push_clip = clipping;
-	text("Standart string data and nothing to do");
-	caret.y += texth() + metrics::padding;
-	width = 100; height = 18;
-	rectb();
-	caret.y += height + metrics::border + metrics::padding;
 	if(false) {
 		paint_portraits();
 		caret.y += 32 + metrics::border + metrics::padding;
 	}
 	caret.x += 32;
+	caret.y += 32;
 	if(true) {
 		paint_monsters();
 		caret.y += 32 + metrics::border + metrics::padding;
 	}
-	caret.x = 100; caret.y = 80;
-	line(200, 300);
-	caret.x = 200; caret.y = 100;
-	circle(32);
 	clipping = push_clip;
+	paint_hilite();
 }
 
 static void starting() {
@@ -70,6 +83,7 @@ void main_util();
 
 int main(int argc, char *argv[]) {
 	//main_util();
+	ui::callback::getstatus = getstatus;
 	return application(starting, 0);
 }
 

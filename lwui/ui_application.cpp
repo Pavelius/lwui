@@ -3,6 +3,7 @@
 #include "log.h"
 #include "variant.h"
 #include "ui.h"
+#include "ui_application.h"
 
 using namespace ui;
 
@@ -10,8 +11,8 @@ void set_dark_theme();
 void initialize_translation(const char* locale);
 void initialize_png();
 
+fnstatus ui::callback::getstatus;
 static rect statusbar_rect;
-static void* current_hilite;
 
 static void menubutton(int index, const void* value, const char* text, fnevent press_event) {
 }
@@ -19,17 +20,17 @@ static void menubutton(int index, const void* value, const char* text, fnevent p
 static void menubeforepaint() {
 }
 
-static void beforemodal() {
+void ui::standart::beforemodal() {
 }
 
 static void statusbar() {
 	auto push_height = height;
 	auto push_width = width;
 	auto push_caret = caret;
-	auto dy = texth() + metrics::border * 2; height = dy;
+	auto dy = texth() + metrics::border * 2 + 2; height = dy;
 	caret.y = push_height - dy;
 	gradv(colors::form, colors::window, 0);
-	strokeline();
+	strokeline(); caret.y += 2;
 	setoffset(metrics::border, metrics::border);
 	saveposition(statusbar_rect);
 	caret = push_caret;
@@ -53,19 +54,41 @@ static void toolbar() {
 	strokeline();
 }
 
-static void background() {
+void ui::standart::background() {
 	statusbar();
 	toolbar();
 	fillwindow();
 }
 
-static void tips() {
+static void show_statusbar() {
+	if(!statusbar_rect || !callback::getstatus || !hilite_object)
+		return;
+	rectpush push;
+	loadposition(statusbar_rect);
+	auto push_clip = clipping;
+	char temp[260]; stringbuilder sb(temp); sb.clear();
+	callback::getstatus(hilite_object, sb);
+	if(temp[0]) {
+		auto push_width = width;
+		textfs(temp);
+		caret.x += (push_width - width) / 2;
+		textf(temp);
+	}
+	clipping = push_clip;
+}
+
+void ui::standart::tips() {
+	show_statusbar();
+}
+
+void ui::standart::getstatus(const void* object, stringbuilder& sb) {
+	variant v = object;
 }
 
 int ui::application(fnevent proc, fnevent initializing) {
 	initialize_png();
-	//if(!utg::callback::getstatus)
-	//	utg::callback::getstatus = utg::getstatus;
+	if(!callback::getstatus)
+		callback::getstatus = standart::getstatus;
 	if(!proc)
 		return -1;
 	set_dark_theme();
@@ -75,9 +98,9 @@ int ui::application(fnevent proc, fnevent initializing) {
 		initializing();
 	if(log::geterrors())
 		return -1;
-	pbeforemodal = beforemodal;
-	pbackground = background;
-	ptips = tips;
+	pbeforemodal = standart::beforemodal;
+	pbackground = standart::background;
+	ptips = standart::tips;
 	metrics::border = 1;
 	metrics::padding = 4;
 	answers::paintcell = menubutton;

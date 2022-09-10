@@ -177,6 +177,7 @@
     <ClCompile Include="surface_serial.cpp" />
     <ClCompile Include="szdup.cpp" />
     <ClCompile Include="ui_theme.cpp" />
+    <ClCompile Include="variant.cpp" />
     <ClCompile Include="widget.cpp" />
     <ClCompile Include="win_draw.cpp" />
     <ClCompile Include="win_io_file.cpp" />
@@ -198,7 +199,6 @@
     <ClInclude Include="dice.h" />
     <ClInclude Include="ui.h" />
     <ClInclude Include="flagable.h" />
-    <ClInclude Include="font_util.h" />
     <ClInclude Include="gender.h" />
     <ClInclude Include="io_stream.h" />
     <ClInclude Include="log.h" />
@@ -215,6 +215,8 @@
     <ClInclude Include="string.h" />
     <ClInclude Include="stringact.h" />
     <ClInclude Include="stringbuilder.h" />
+    <ClInclude Include="ui_application.h" />
+    <ClInclude Include="variant.h" />
     <ClInclude Include="widget.h" />
     <ClInclude Include="win.h" />
   </ItemGroup>

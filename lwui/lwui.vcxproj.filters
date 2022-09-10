@@ -141,6 +141,9 @@
     <ClCompile Include="zip.cpp">
       <Filter>Support</Filter>
     </ClCompile>
+    <ClCompile Include="variant.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="answers.h">
@@ -236,10 +239,13 @@
     <ClInclude Include="sprite_util.h">
       <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="font_util.h">
-      <Filter>Util</Filter>
-    </ClInclude>
     <ClInclude Include="widget.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_application.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="variant.h">
       <Filter>Support</Filter>
     </ClInclude>
   </ItemGroup>
