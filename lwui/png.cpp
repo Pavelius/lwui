@@ -1,5 +1,5 @@
 ﻿#include "crt.h"
-#include "draw.h"
+#include "ui.h"
 
 enum colortypes {
 	PngColorGrey = 0, // greyscale: 1,2,4,8,16 bit
@@ -403,7 +403,7 @@ static void postprocess_scanlines(unsigned char* out, unsigned char* in, unsigne
 
 int decode_zip(unsigned char* output, const unsigned char* input, int input_size);
 
-static struct png_bitmap_plugin : public draw::surface::plugin {
+static struct png_bitmap_plugin : public ui::surface::plugin {
 
 	png_bitmap_plugin() : plugin("png", "PNG images\0*.png\0") {}
 

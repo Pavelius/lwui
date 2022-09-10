@@ -18,6 +18,9 @@ static HWND	hwnd;
 static point minimum;
 extern rect	sys_static_area;
 static bool	use_mouse = true;
+static surface	video_buffer;
+
+void scale2x(void* void_dst, unsigned dst_slice, const void* void_src, unsigned src_slice, unsigned width, unsigned height);
 
 static struct sys_key_mapping {
 	unsigned    key;
@@ -186,23 +189,16 @@ static LRESULT CALLBACK WndProc(HWND hwnd, unsigned uMsg, WPARAM wParam, LPARAM 
 	MSG msg;
 	switch(uMsg) {
 	case WM_ERASEBKGND:
-		if(ui::canvas) {
-			RECT rc; GetClientRect(hwnd, &rc);
+		if(video_buffer) {
 			video_descriptor.bmp.bmiHeader.biSize = sizeof(video_descriptor.bmp.bmiHeader);
-			video_descriptor.bmp.bmiHeader.biWidth = ui::canvas->width;
-			video_descriptor.bmp.bmiHeader.biHeight = -ui::canvas->height;
-			video_descriptor.bmp.bmiHeader.biBitCount = ui::canvas->bpp;
+			video_descriptor.bmp.bmiHeader.biWidth = video_buffer.width;
+			video_descriptor.bmp.bmiHeader.biHeight = -video_buffer.height;
+			video_descriptor.bmp.bmiHeader.biBitCount = video_buffer.bpp;
 			video_descriptor.bmp.bmiHeader.biPlanes = 1;
-			if(rc.right != ui::canvas->width || rc.bottom != ui::canvas->height)
-				StretchDIBits((void*)wParam,
-					0, 0, rc.right, rc.bottom,
-					0, 0, ui::canvas->width, ui::canvas->height,
-					ui::canvas->bits, &video_descriptor.bmp, DIB_RGB_COLORS, SRCCOPY);
-			else
-				SetDIBitsToDevice((void*)wParam,
-					0, 0, rc.right, rc.bottom,
-					0, 0, 0, ui::canvas->height,
-					ui::canvas->bits, &video_descriptor.bmp, DIB_RGB_COLORS);
+			SetDIBitsToDevice((void*)wParam,
+				0, 0, video_buffer.width, video_buffer.height,
+				0, 0, 0, video_buffer.height,
+				video_buffer.bits, &video_descriptor.bmp, DIB_RGB_COLORS);
 		}
 		return 1;
 	case WM_CLOSE:
@@ -242,8 +238,14 @@ static const char* register_class(const char* class_name) {
 }
 
 void ui::updatewindow() {
-	if(!hwnd)
+	if(!hwnd || !canvas)
 		return;
+	if(video_buffer.height != canvas->height
+		|| video_buffer.width != canvas->width)
+		video_buffer.resize(canvas->width * ZOOM, canvas->height * ZOOM, 32, true);
+	scale2x(video_buffer.ptr(0, 0), video_buffer.scanline,
+		canvas->ptr(0, 0), canvas->scanline,
+		canvas->width, canvas->height);
 	if(!IsWindowVisible(hwnd))
 		ShowWindow(hwnd, SW_SHOW);
 	InvalidateRect(hwnd, 0, 1);

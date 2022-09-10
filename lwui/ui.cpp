@@ -2122,21 +2122,6 @@ const pma* pma::getheader(const char* id) const {
 	return 0;
 }
 
-const char* pma::getstring(int id) const {
-	auto p = getheader("STR");
-	if(!p || id > p->count)
-		return "";
-	return (char*)p + ((unsigned*)((char*)p + sizeof(*p)))[id];
-}
-
-int pma::find(const char* name) const {
-	for(int i = 1; i <= count; i++) {
-		if(strcmp(getstring(i), name) == 0)
-			return i;
-	}
-	return 0;
-}
-
 int sprite::ganim(int index, int tick) {
 	if(!cicles)
 		return 0;

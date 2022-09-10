@@ -60,9 +60,7 @@ struct pma {
 	char				name[4]; // Identifier of current block
 	int					size; // Size of all block
 	int					count; // Count of records in this block
-	int					find(const char* name) const;
 	const pma*			getheader(const char* name) const;
-	const char*			getstring(int id) const;
 };
 struct sprite : pma {
 	enum encodes { Auto, RAW, RLE, ALC, RAW8, RLE8 };
@@ -196,7 +194,6 @@ int						getbpp();
 inline rect				getrect() { return {caret.x, caret.y, caret.x + width, caret.y + height}; }
 int						getheight();
 int						getwidth();
-void					getwindowpos(point& pos, point& size, unsigned* flags);
 void					glyph(int sym, unsigned flags);
 void					gradv(const color c1, const color c2, int skip = 0);
 void					gradh(const color c1, const color c2, int skip = 0);
@@ -205,7 +202,7 @@ void					hexagon();
 int						hittest(int x, int test_x, const char* string, int lenght);
 int						hittest(rect rc, const char* string, unsigned state, point mouse);
 bool					ishilite(const rect& rc);
-inline bool				ishilite() { return ishilite({caret.x, caret.y, caret.x + width, caret.y + height}); }
+inline bool				ishilite() { return ishilite(getrect()); }
 inline bool				ishilite(int size) { return ishilite({caret.x-size, caret.y - size, caret.x + size, caret.y + size}); }
 void					image(int x, int y, const sprite* e, int id, int flags);
 inline void				image(const sprite* e, int id, int flags) { image(caret.x, caret.y, e, id, flags); }

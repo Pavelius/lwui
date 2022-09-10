@@ -8,8 +8,10 @@ using namespace ui;
 
 void set_dark_theme();
 void initialize_translation(const char* locale);
+void initialize_png();
 
 static rect statusbar_rect;
+static void* current_hilite;
 
 static void menubutton(int index, const void* value, const char* text, fnevent press_event) {
 }
@@ -61,6 +63,7 @@ static void tips() {
 }
 
 int ui::application(fnevent proc, fnevent initializing) {
+	initialize_png();
 	//if(!utg::callback::getstatus)
 	//	utg::callback::getstatus = utg::getstatus;
 	if(!proc)

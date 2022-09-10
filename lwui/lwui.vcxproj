@@ -152,6 +152,8 @@
     <ClCompile Include="datasource.cpp" />
     <ClCompile Include="datetime.cpp" />
     <ClCompile Include="dice.cpp" />
+    <ClCompile Include="png.cpp" />
+    <ClCompile Include="scale2x.cpp" />
     <ClCompile Include="ui.cpp" />
     <ClCompile Include="ui_answers.cpp" />
     <ClCompile Include="ui_application.cpp" />
@@ -179,6 +181,7 @@
     <ClCompile Include="win_draw.cpp" />
     <ClCompile Include="win_io_file.cpp" />
     <ClCompile Include="win_time.cpp" />
+    <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="answers.h" />

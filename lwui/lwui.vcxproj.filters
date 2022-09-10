@@ -132,6 +132,15 @@
     <ClCompile Include="ui_answers.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="scale2x.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="png.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="zip.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="answers.h">
