@@ -24,7 +24,7 @@ void ui::showbackground() {
 	fore = push_fore;
 }
 
-static void list_input(int& current, int& origin, int perpage, int perline) {
+static void list_input(int& current, int& origin, int perpage, int row_count) {
 	list_current = &current;
 	if(current >= list_maximum)
 		current = list_maximum - 1;
@@ -37,19 +37,19 @@ static void list_input(int& current, int& origin, int perpage, int perline) {
 	switch(hot.key) {
 	case MouseWheelUp:
 		if(gui.hilighted && origin)
-			execute(cbsetint, origin - 1, 0, &origin);
+			execute(cbsetint, origin - row_count, 0, &origin);
 		break;
 	case MouseWheelDown:
 		if(gui.hilighted && origin + perpage < list_maximum - 1)
-			execute(cbsetint, origin + 1, 0, &origin);
+			execute(cbsetint, origin + row_count, 0, &origin);
 		break;
 	case KeyUp:
 		if(current)
-			execute(cbsetint, current - 1, 0, &current);
+			execute(cbsetint, current - row_count, 0, &current);
 		break;
 	case KeyDown:
 		if(current < list_maximum - 1)
-			execute(cbsetint, current + 1, 0, &current);
+			execute(cbsetint, current + row_count, 0, &current);
 		break;
 	case KeyHome:
 		if(current)
@@ -88,7 +88,7 @@ void ui::list(int& origin, int& current, int row_height, fnevent prow) {
 	setclipall();
 	gui.hilighted = ishilite();
 	list_maximum = gui.count;
-	list_input(current, origin, list_perpage, row_height);
+	list_input(current, origin, list_perpage, 1);
 	auto push_height = height;
 	height = row_height;
 	char temp[1024]; stringbuilder sb(temp);
@@ -126,7 +126,7 @@ void ui::picker(int& origin, int& current, int row_height, int line_count, fneve
 	setclipall();
 	gui.hilighted = ishilite();
 	list_maximum = gui.count;
-	list_input(current, origin, list_perpage, row_height);
+	list_input(current, origin, list_perpage, line_count);
 	auto push_height = height;
 	height = row_height;
 	char temp[1024]; stringbuilder sb(temp);

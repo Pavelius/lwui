@@ -260,5 +260,8 @@
     <ClInclude Include="ui_gui.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="kering.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

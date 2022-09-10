@@ -5,8 +5,8 @@ struct kering {
 		struct {
 			unsigned short c1, c2;
 		};
-		unsigned		u;
+		unsigned u;
 	};
-	int					offset;
-	static int			compare(const void* v1, const void* v2);
+	int			offset;
+	static int	compare(const void* v1, const void* v2) { return ((kering*)v1)->u - ((kering*)v2)->u; }
 };

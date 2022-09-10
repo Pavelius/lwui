@@ -199,6 +199,7 @@
     <ClInclude Include="datasource.h" />
     <ClInclude Include="datetime.h" />
     <ClInclude Include="dice.h" />
+    <ClInclude Include="kering.h" />
     <ClInclude Include="ui_gui.h" />
     <ClInclude Include="ui_list.h" />
     <ClInclude Include="ui.h" />
