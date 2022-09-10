@@ -27,10 +27,10 @@ static void statusbar() {
 	auto push_height = height;
 	auto push_width = width;
 	auto push_caret = caret;
-	auto dy = texth() + metrics::border * 2 + 2; height = dy;
+	auto dy = texth() + metrics::border * 2 + 1; height = dy;
 	caret.y = push_height - dy;
 	gradv(colors::form, colors::window, 0);
-	strokeline(); caret.y += 2;
+	strokeline();
 	setoffset(metrics::border, metrics::border);
 	saveposition(statusbar_rect);
 	caret = push_caret;

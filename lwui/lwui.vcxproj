@@ -152,6 +152,8 @@
     <ClCompile Include="datasource.cpp" />
     <ClCompile Include="datetime.cpp" />
     <ClCompile Include="dice.cpp" />
+    <ClCompile Include="ui_gui.cpp" />
+    <ClCompile Include="ui_list.cpp" />
     <ClCompile Include="png.cpp" />
     <ClCompile Include="scale2x.cpp" />
     <ClCompile Include="ui.cpp" />
@@ -197,6 +199,8 @@
     <ClInclude Include="datasource.h" />
     <ClInclude Include="datetime.h" />
     <ClInclude Include="dice.h" />
+    <ClInclude Include="ui_gui.h" />
+    <ClInclude Include="ui_list.h" />
     <ClInclude Include="ui.h" />
     <ClInclude Include="flagable.h" />
     <ClInclude Include="gender.h" />

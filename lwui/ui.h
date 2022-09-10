@@ -63,7 +63,7 @@ struct pma {
 	const pma*			getheader(const char* name) const;
 };
 struct sprite : pma {
-	enum encodes { Auto, RAW, RLE, ALC, RAW8, RLE8, ALC8 };
+	enum encodes { Auto, RAW, RLE, ALC, RAW8, RLE8, ALC8, RAW1 };
 	struct frame {
 		short 			sx, sy;
 		short			ox, oy;
@@ -188,6 +188,7 @@ void					dragbegin(const void* p);
 void					dropshadow();
 void					execute(fnevent proc, long value = 0, long value2 = 0, const void* object = 0);
 void					fhexagon();
+void					fillactive();
 void					fillform();
 void					fillwindow();
 int						getbpp();

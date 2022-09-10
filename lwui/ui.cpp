@@ -207,6 +207,24 @@ static void raw832m(unsigned char* d, int d_scan, unsigned char* s, int s_scan, 
 	}
 }
 
+static void raw1(int x, int y, unsigned char* s, int width, int y2) {
+	if(!alpha)
+		return;
+	auto x2 = x + width;
+	auto sn = (width + 7) / 8;
+	while(y < y2) {
+		if(y >= clipping.y1 && y < clipping.y2) {
+			for(auto x1 = x; x1 < x2; x1++) {
+				if(x1 < clipping.x1 || x1 >= clipping.x2)
+					continue;
+				if((s[(x1 - x) / 8] & (0x80 >> ((x1 - x) % 8))) != 0)
+					*((color*)ui::canvas->ptr(x1, y)) = fore;
+			}
+		}
+		y++; s += sn;
+	}
+}
+
 static void raw32(unsigned char* d, int d_scan, unsigned char* s, int s_scan, int width, int height) {
 	const int cbs = 3;
 	const int cbd = 4;
@@ -1513,16 +1531,33 @@ int ui::textw(const char* string, int count) {
 	if(!font)
 		return 0;
 	int x1 = 0;
+	auto pk = font->getheader("KRN");
 	unsigned char s0 = 0x0;
 	if(count == -1) {
 		const char *s1 = string;
-		while(*s1)
-			x1 += textw(szget(&s1));
+		if(pk) {
+			while(*s1) {
+				unsigned char sr = *((unsigned char*)s1);
+				x1 += textw(szget(&s1)) + add_kering(pk, s0, sr);
+				s0 = sr;
+			}
+		} else {
+			while(*s1)
+				x1 += textw(szget(&s1));
+		}
 	} else {
 		const char *s1 = string;
 		const char *s2 = string + count;
-		while(s1 < s2)
-			x1 += textw(szget(&s1));
+		if(pk) {
+			while(s1 < s2) {
+				unsigned char sr = *((unsigned char*)s1);
+				x1 += textw(szget(&s1)) + add_kering(pk, s0, sr);
+				s0 = sr;
+			}
+		} else {
+			while(s1 < s2)
+				x1 += textw(szget(&s1));
+		}
 	}
 	return x1;
 }
@@ -1544,6 +1579,7 @@ void ui::text(const char* string, int count, unsigned flags) {
 		while(s1 < s2) {
 			unsigned char sr = *((unsigned char*)s1);
 			int sm = szget(&s1);
+			caret.x += add_kering(pk, s0, sr);
 			s0 = sr;
 			if(sm >= 0x21)
 				glyph(sm, flags);
@@ -1810,6 +1846,7 @@ void ui::image(int x, int y, const sprite* e, int id, int flags) {
 		return;
 	if(!canvas)
 		return;
+	auto xo = x;
 	if(flags & ImageMirrorH) {
 		x2 = x;
 		if((flags & ImageNoOffset) == 0)
@@ -1839,6 +1876,7 @@ void ui::image(int x, int y, const sprite* e, int id, int flags) {
 			case sprite::ALC: s = skip_alc(s, clipping.y1 - y); break;
 			case sprite::ALC8: s = skip_v3(s, clipping.y1 - y); break;
 			case sprite::RAW: s += (clipping.y1 - y) * f.sx * 3; break;
+			case sprite::RAW1: s += (clipping.y1 - y) * ((f.sx + 7) / 8); break;
 			case sprite::RAW8: s += (clipping.y1 - y) * f.sx; break;
 			case sprite::RLE8: s = skip_v3(s, clipping.y1 - y); break;
 			case sprite::RLE: s = skip_rle32(s, clipping.y1 - y); break;
@@ -1853,6 +1891,7 @@ void ui::image(int x, int y, const sprite* e, int id, int flags) {
 			case sprite::ALC: s = skip_alc(s, y2 - clipping.y2); break;
 			case sprite::ALC8: s = skip_v3(s, y2 - clipping.y2); break;
 			case sprite::RAW: s += (y2 - clipping.y2) * f.sx * 3; break;
+			case sprite::RAW1: s += (y2 - clipping.y2) * ((f.sx + 7) / 8); break;
 			case sprite::RAW8: s += (y2 - clipping.y2) * f.sx; break;
 			case sprite::RLE8: s = skip_v3(s, y2 - clipping.y2); break;
 			case sprite::RLE: s = skip_rle32(s, y2 - clipping.y2); break;
@@ -1887,6 +1926,9 @@ void ui::image(int x, int y, const sprite* e, int id, int flags) {
 			raw32(ptr(x, sy), wd, s, f.sx * 3,
 				x2 - x,
 				y2 - y);
+		break;
+	case sprite::RAW1:
+		raw1(xo, y, s, f.sx, y2);
 		break;
 	case sprite::RAW8:
 		if(x < clipping.x1) {
@@ -2474,6 +2516,13 @@ void ui::cbsetsht() {
 void ui::cbsetptr() {
 	auto p = (void**)hot.object;
 	*p = (void*)hot.param;
+}
+
+void ui::fillactive() {
+	auto push_fore = fore;
+	fore = colors::active;
+	rectf();
+	fore = push_fore;
 }
 
 void ui::fillform() {
