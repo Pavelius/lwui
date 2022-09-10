@@ -1,5 +1,6 @@
 #include "color.h"
 #include "crt.h"
+#include "kering.h"
 #include "ui.h"
 
 #ifndef __GNUC__
@@ -531,70 +532,53 @@ static void alc832(unsigned char* p1, int d1, unsigned char* s, int h, const uns
 	unsigned char* d = p1;
 	if(!alpha)
 		return;
-	auto fr = fore.r;
+	auto fr = fore.b;
 	auto fg = fore.g;
-	auto fb = fore.b;
+	auto fb = fore.r;
 	while(true) {
-		unsigned char c = *s++;
-		if(c == 0) {
+		unsigned char cb = *s++;
+		if(cb == 0) {
 			p1 += d1;
 			s1 += d1;
 			s2 += d1;
 			if(--h == 0)
 				break;
 			d = p1;
-		} else if(c <= 0x9F) {
-			unsigned char ap = alpha, cb;
-			bool need_correct_s = false;
-			// count
-			if(c <= 0x7F) {
-				need_correct_s = true;
-				cb = c;
-			} else if(c == 0x80) {
-				cb = *s++;
-				ap >>= 1;
-			} else {
-				cb = c - 0x80;
-				ap >>= 1;
-			}
+		} else if(cb <= 0x9F) {
 			// clip left invisible part
 			if(d + cb * cbd <= s1 || d > s2) {
 				d += cb * cbd;
-				if(need_correct_s)
-					s += cb;
+				s += cb;
 				continue;
 			} else if(d < s1) {
 				unsigned char sk = (s1 - d) / cbd;
 				d += sk * cbd;
-				if(need_correct_s)
-					s += sk;
+				s += sk;
 				cb -= sk;
 			}
 			// visible part
 			do {
 				if(d >= s2)
 					break;
-				unsigned char a1 = *s++;
-				if(alpha != 0xFF)
-					a1 = ((int)alpha * (*s++)) >> 8;
-				d[0] = (((int)d[0] * (255 - a1)) + ((int)fr * a1)) >> 8;
-				d[1] = (((int)d[1] * (255 - a1)) + ((int)fg * a1)) >> 8;
-				d[2] = (((int)d[2] * (255 - a1)) + ((int)fb * a1)) >> 8;
-				//*((color*)d) = pallette[
+				auto ap = *s++;
+				if(ap >= 60) {
+					d[0] = fr;
+					d[1] = fg;
+					d[2] = fb;
+				} else {
+					d[0] = (((int)d[0] * (64 - ap)) + ((fr) * (ap))) >> 6;
+					d[1] = (((int)d[1] * (64 - ap)) + ((fg) * (ap))) >> 6;
+					d[2] = (((int)d[2] * (64 - ap)) + ((fb) * (ap))) >> 6;
+				}
 				d += cbd;
 			} while(--cb);
 			// right clip part
-			if(cb) {
-				if(need_correct_s)
-					s += cb;
+			if(cb)
 				d += cb * cbd;
-			}
-		} else {
-			if(c == 0xA0)
-				d += (*s++) * cbd;
-			else
-				d += (c - 0xA0) * cbd;
-		}
+		} else if(cb == 0xA0)
+			d += (*s++) * cbd;
+		else
+			d += (cb - 0xA0) * cbd;
 	}
 }
 
@@ -1507,6 +1491,22 @@ int ui::texth(const char* string, int width) {
 		string = skiptr(string + c);
 	}
 	return y1;
+}
+
+int kering::compare(const void* v1, const void* v2) {
+	return ((kering*)v1)->u - ((kering*)v2)->u;
+}
+
+static int add_kering(const pma* pk, int s1, int s2) {
+	if(!s1 || !s2)
+		return 0;
+	kering e;
+	e.c1 = s1;
+	e.c2 = s2;
+	auto pr = (kering*)bsearch(&e, (char*)pk + sizeof(pma), pk->count, sizeof(kering), kering::compare);
+	if(pr)
+		return pr->offset;
+	return 0;
 }
 
 int ui::textw(const char* string, int count) {

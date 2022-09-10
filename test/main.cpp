@@ -82,7 +82,7 @@ static void starting() {
 void main_util();
 
 int main(int argc, char *argv[]) {
-	//main_util();
+	main_util();
 	ui::callback::getstatus = getstatus;
 	return application(starting, 0);
 }
