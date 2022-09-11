@@ -1,11 +1,11 @@
 #include "crt.h"
-#include "ui.h"
+#include "draw.h"
 
-using namespace ui;
+using namespace draw;
 
 static char text_params_data[4096];
-int ui::tab_pixels = 0;
-long ui::text_params[16];
+int draw::tab_pixels = 0;
+long draw::text_params[16];
 static const char* text_start_string;
 static int text_start_horiz;
 static point maxcaret;
@@ -64,7 +64,7 @@ static const char* textspc(const char* p, int x1) {
 		switch(p[0]) {
 		case ' ':
 			p++;
-			caret.x += ui::textw(' ');
+			caret.x += draw::textw(' ');
 			continue;
 		case '\t':
 			p++;
@@ -101,10 +101,10 @@ static void apply_line_feed(int x1, int dy) {
 }
 
 static const char* citate(const char* p, int x1, int x2, color new_fore, const sprite* new_font) {
-	auto push_fore = ui::fore;
-	auto push_font = ui::font;
-	ui::fore = new_fore;
-	ui::font = new_font;
+	auto push_fore = draw::fore;
+	auto push_font = draw::font;
+	draw::fore = new_fore;
+	draw::font = new_font;
 	caret.x = x1;
 	while(p[0]) {
 		if(p[0] == '-' && p[1] == '#' && p[2] == '-' && (p[3] == 13 || p[3] == 10 || p[3]==0)) {
@@ -118,8 +118,8 @@ static const char* citate(const char* p, int x1, int x2, color new_fore, const s
 		apply_line_feed(x1, texth());
 	}
 	apply_line_feed(caret.x, 0);
-	ui::fore = push_fore;
-	ui::font = push_font;
+	draw::fore = push_fore;
+	draw::font = push_font;
 	return p;
 }
 
@@ -414,7 +414,7 @@ static const char* text_block(const char* p, int x1, int x2) {
 	return p;
 }
 
-void ui::textf(const char* p) {
+void draw::textf(const char* p) {
 	auto push_width = width;
 	auto push_height = height;
 	auto push_tab = tab_pixels;
@@ -429,7 +429,7 @@ void ui::textf(const char* p) {
 	height = push_height;
 }
 
-void ui::textfs(const char* string) {
+void draw::textfs(const char* string) {
 	auto push_caret = caret;
 	auto push_clipping = clipping;
 	clipping.clear(); caret = {};

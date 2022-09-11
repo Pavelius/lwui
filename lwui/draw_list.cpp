@@ -1,21 +1,21 @@
 #include "crt.h"
-#include "ui.h"
-#include "ui_gui.h"
-#include "ui_list.h"
+#include "draw.h"
+#include "draw_gui.h"
+#include "draw_list.h"
 
-using namespace ui;
+using namespace draw;
 
 static int list_maximum, list_perpage;
 static int* list_current;
 
 sprite* metrics::list = (sprite*)loadb("art/tool/tree.pma");
 
-void ui::partoffset(int x, int y) {
+void draw::partoffset(int x, int y) {
 	caret.x += x; caret.y += y;
 	width -= x; height -= y;
 }
 
-void ui::showbackground() {
+void draw::showbackground() {
 	rectpush push;
 	auto push_fore = fore;
 	fore = colors::window;
@@ -72,13 +72,13 @@ static void list_input(int& current, int& origin, int perpage, int row_count) {
 }
 
 static void rectfhl(unsigned char alpha) {
-	auto push_alpha = ui::alpha;
-	ui::alpha = alpha;
+	auto push_alpha = draw::alpha;
+	draw::alpha = alpha;
 	fillactive();
-	ui::alpha = push_alpha;
+	draw::alpha = push_alpha;
 }
 
-void ui::list(int& origin, int& current, int row_height, fnevent prow) {
+void draw::list(int& origin, int& current, int row_height, fnevent prow) {
 	if(!row_height || !prow)
 		return;
 	list_perpage = height / row_height;
@@ -116,7 +116,7 @@ void ui::list(int& origin, int& current, int row_height, fnevent prow) {
 	clipping = push_clip;
 }
 
-void ui::picker(int& origin, int& current, int row_height, int line_count, fnevent prow) {
+void draw::picker(int& origin, int& current, int row_height, int line_count, fnevent prow) {
 	if(!row_height || !prow)
 		return;
 	list_perpage = height / row_height;

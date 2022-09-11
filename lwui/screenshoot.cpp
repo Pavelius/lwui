@@ -1,12 +1,12 @@
 ﻿#include "screenshoot.h"
 
-using namespace ui;
+using namespace draw;
 
 screenshoot::screenshoot(rect rc, bool fade) : surface(rc.width(), rc.height(), getbpp()) {
 	x = rc.x1;
 	y = rc.y1;
-	if(ui::canvas) {
-		blit(0, 0, width, height, 0, *ui::canvas, x, y);
+	if(draw::canvas) {
+		blit(0, 0, width, height, 0, *draw::canvas, x, y);
 		if(fade) {
 			auto push_canvas = canvas;
 			auto push_clip = clipping;
@@ -33,6 +33,6 @@ screenshoot::~screenshoot() {
 
 void screenshoot::restore() {
 	setclip();
-	if(ui::canvas)
-		ui::canvas->blit(x, y, width, height, 0, *this, 0, 0);
+	if(draw::canvas)
+		draw::canvas->blit(x, y, width, height, 0, *this, 0, 0);
 }

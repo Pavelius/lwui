@@ -1,9 +1,9 @@
 #include "crt.h"
-#include "ui_gui.h"
+#include "draw_gui.h"
 
-using namespace ui;
+using namespace draw;
 
-guii ui::gui;
+guii draw::gui;
 
 void guii::clear() {
 	memset(this, 0, sizeof(*this));

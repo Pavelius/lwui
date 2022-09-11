@@ -1,7 +1,7 @@
 #include "crt.h"
-#include "ui.h"
+#include "draw.h"
 
-using namespace ui;
+using namespace draw;
 
 namespace {
 struct resei {
@@ -37,7 +37,7 @@ static unsigned char* rotate(unsigned char* src, int width, int height) {
 	return dst;
 }
 
-const sprite* ui::gres(const char* name, const char* folder, point maxsize, int ox, int oy) {
+const sprite* draw::gres(const char* name, const char* folder, point maxsize, int ox, int oy) {
 	if(!name)
 		return 0;
 	if(!folder)
@@ -65,7 +65,7 @@ const sprite* ui::gres(const char* name, const char* folder, point maxsize, int 
 		}
 		p->data = (sprite*)loadb(szurl(temp, p->folder, name, "pma"));
 		if(!p->data) {
-			ui::surface dc;
+			draw::surface dc;
 			for(auto pg = surface::plugin::first; pg; pg = pg->next) {
 				szurl(temp, p->folder, name, pg->name);
 				if(dc.read(temp, 0, 32)) {

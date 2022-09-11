@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace ui {
+namespace draw {
 struct guii : datasource {
 	const char*			id;
 	const char*			title;

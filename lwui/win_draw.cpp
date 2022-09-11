@@ -1,10 +1,10 @@
 #include "crt.h"
-#include "ui.h"
+#include "draw.h"
 #include "win.h"
 
 #define ZOOM 2
 
-using namespace ui;
+using namespace draw;
 
 #pragma pack(push)
 #pragma pack(1)
@@ -101,7 +101,7 @@ static int handle(MSG& msg) {
 		TrackMouseEvent(&tm);
 		hot.mouse.x = LOWORD(msg.lParam) / ZOOM;
 		hot.mouse.y = HIWORD(msg.lParam) / ZOOM;
-		if(ui::dragactive())
+		if(draw::dragactive())
 			return MouseMove;
 		if(hot.mouse.in(sys_static_area))
 			return InputNoUpdate;
@@ -237,7 +237,7 @@ static const char* register_class(const char* class_name) {
 	return class_name;
 }
 
-void ui::updatewindow() {
+void draw::updatewindow() {
 	if(!hwnd || !canvas)
 		return;
 	if(video_buffer.height != canvas->height
@@ -252,7 +252,7 @@ void ui::updatewindow() {
 	UpdateWindow(hwnd);
 }
 
-void ui::syscursor(bool enable) {
+void draw::syscursor(bool enable) {
 	ShowCursor(enable ? 1 : 0);
 }
 
@@ -268,8 +268,8 @@ void create_platform_window() {
 	auto y = (GetSystemMetrics(SM_CYFULLSCREEN) - window_height) / 2;
 	minimum.x = client_width;
 	minimum.y = client_height;
-	if(ui::canvas)
-		ui::canvas->resize(width, height, 32, true);
+	if(draw::canvas)
+		draw::canvas->resize(width, height, 32, true);
 	setclip();
 	// Create The Window
 	hwnd = CreateWindowExA(0, register_class("LWUIWindow"), 0, dwStyle,
@@ -302,7 +302,7 @@ static unsigned handle_event(unsigned m) {
 	return m;
 }
 
-void ui::doredraw() {
+void draw::doredraw() {
 	MSG	msg;
 	updatewindow();
 	if(!hwnd)
@@ -314,7 +314,7 @@ void ui::doredraw() {
 	}
 }
 
-int ui::rawinput() {
+int draw::rawinput() {
 	MSG	msg;
 	updatewindow();
 	if(!hwnd)
@@ -333,11 +333,11 @@ int ui::rawinput() {
 	return 0;
 }
 
-void ui::setcaption(const char* string) {
+void draw::setcaption(const char* string) {
 	SetWindowTextA(hwnd, string);
 }
 
-void ui::settimer(unsigned milleseconds) {
+void draw::settimer(unsigned milleseconds) {
 	if(milleseconds)
 		SetTimer(hwnd, InputTimer, milleseconds, 0);
 	else

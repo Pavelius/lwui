@@ -1,9 +1,9 @@
 #include "point.h"
-#include "ui.h"
+#include "draw.h"
 
 #pragma once
 
-namespace ui {
+namespace draw {
 struct screenshoot : public point, public surface {
 	screenshoot(bool fade = false);
 	screenshoot(rect rc, bool fade = false);

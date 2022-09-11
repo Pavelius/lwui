@@ -53,11 +53,11 @@ void answers::clear() {
 	sc.clear();
 }
 
-void ui::pause() {
+void draw::pause() {
 	pause(getnm("Continue"));
 }
 
-void ui::pause(const char* title, ...) {
+void draw::pause(const char* title, ...) {
 	if(answers::console) {
 		if(!(*answers::console))
 			return;
@@ -69,13 +69,13 @@ void ui::pause(const char* title, ...) {
 		answers::console->clear();
 }
 
-void ui::pausenc(const char* title, ...) {
+void draw::pausenc(const char* title, ...) {
 	char temp[260]; stringbuilder sb(temp);
 	answers an; sb.addv(title, xva_start(title));
 	an.choose(0, temp, true);
 }
 
-bool ui::yesno(const char* title, ...) {
+bool draw::yesno(const char* title, ...) {
 	char temp[260]; stringbuilder sb(temp);
 	sb.addv(title, xva_start(title));
 	answers an;
@@ -84,7 +84,7 @@ bool ui::yesno(const char* title, ...) {
 	return an.choose(temp);
 }
 
-void ui::information(const char* format, ...) {
+void draw::information(const char* format, ...) {
 	if(!answers::console)
 		return;
 	answers::console->addn("[+");
@@ -92,7 +92,7 @@ void ui::information(const char* format, ...) {
 	answers::console->add("]");
 }
 
-void ui::warning(const char* format, ...) {
+void draw::warning(const char* format, ...) {
 	if(!answers::console)
 		return;
 	answers::console->addn("[-");
@@ -100,7 +100,7 @@ void ui::warning(const char* format, ...) {
 	answers::console->add("]");
 }
 
-void ui::output(const char* format, ...) {
+void draw::output(const char* format, ...) {
 	if(!answers::console)
 		return;
 	answers::console->addx("\n", format, xva_start(format));

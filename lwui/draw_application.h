@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace ui {
+namespace draw {
 namespace callback {
 extern fnstatus getstatus;
 }

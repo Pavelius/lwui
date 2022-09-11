@@ -1,7 +1,7 @@
 #include "answers.h"
-#include "ui.h"
+#include "draw.h"
 
-using namespace ui;
+using namespace draw;
 
 static bool allow(const answers& an, size_t max_width) {
 	for(auto& e : an) {

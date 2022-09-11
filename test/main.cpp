@@ -1,10 +1,10 @@
 #include "crt.h"
 #include "log.h"
-#include "ui.h"
-#include "ui_application.h"
-#include "ui_gui.h"
+#include "draw.h"
+#include "draw_application.h"
+#include "draw_gui.h"
 
-using namespace ui;
+using namespace draw;
 
 static int list_perpage, list_maximum;
 
@@ -25,15 +25,14 @@ static void paint_hilite() {
 	}
 }
 
-static void list_input(int& current, int& origin, int perpage, int row_count) {
+static void list_correct(int& current, int list_maximum) {
 	if(current >= list_maximum)
 		current = list_maximum - 1;
 	if(current < 0)
 		current = 0;
-	if(current < origin)
-		origin = current;
-	if(origin + perpage < current)
-		origin = current - perpage;
+}
+
+static void list_input_origin(int& origin, int perpage, int row_count, int list_maximum) {
 	switch(hot.key) {
 	case MouseWheelUp:
 		if(hot.mouse.in(clipping) && origin)
@@ -43,6 +42,11 @@ static void list_input(int& current, int& origin, int perpage, int row_count) {
 		if(hot.mouse.in(clipping) && (origin + perpage < list_maximum - 1))
 			execute(cbsetint, origin + row_count, 0, &origin);
 		break;
+	}
+}
+
+static void list_input_current(int& current, int perpage, int row_count, int list_maximum) {
+	switch(hot.key) {
 	case KeyUp:
 		if(current)
 			execute(cbsetint, current - row_count, 0, &current);
@@ -67,14 +71,22 @@ static void list_input(int& current, int& origin, int perpage, int row_count) {
 		execute(cbsetint, current + perpage, 0, &current);
 		break;
 	}
-	if(list_maximum > origin + perpage + 1)
-		list_maximum = origin + perpage + 1;
 }
 
-static void monster_element() {
+static void crossmark() {
+	auto push = caret;
+	caret.x -= 4;
+	line(caret.x + 8, caret.y);
+	caret = push;
+	caret.y -= 4;
+	line(caret.x, caret.y + 8);
+	caret = push;
+}
+
+static void icon_element() {
 	auto push_caret = caret;
-	caret.x += 16; caret.y += 16;
-	auto pi = gres("monsters", "art/objects");
+	auto pi = (sprite*)gui.object;
+	caret.x += 16; caret.y += 32;
 	image(caret.x, caret.y, pi, gui.index, 0);
 	if(ishilite(16)) {
 		auto& f = pi->get(gui.index);
@@ -83,22 +95,19 @@ static void monster_element() {
 	caret = push_caret;
 }
 
-static void paint_monsters() {
-	static int origin, current;
-	const auto dx = 16;
-	const auto st = 32;
+static void picker(int& origin, int& current, int maximum, int size, fnevent prow) {
+	if(!gui.object || !size)
+		return;
 	auto push_caret = caret;
-	auto pi = gres("monsters", "art/objects");
-	auto mx = pi->count;
-	auto perpage = 1 + clipping.height() / st;
-	list_input(current, origin, perpage, dx);
+	list_correct(origin, maximum);
+	list_input_origin(origin, 1 + clipping.height() / size, clipping.width() / size, maximum);
 	gui.index = origin;
 	while(caret.y < clipping.y2) {
 		caret.x = push_caret.x;
 		while(caret.x < clipping.x2) {
-			if(gui.index >= mx)
+			if(gui.index >= maximum)
 				break;
-			monster_element();
+			prow();
 			caret.x += 32;
 			gui.index++;
 		}
@@ -117,21 +126,24 @@ static void paint_portraits() {
 	}
 }
 
-static void main_scene() {
-	caret.y += metrics::padding;
+static void paint_monsters() {
+	static int origin, current;
 	auto push_clip = clipping;
+	clipping.set(caret.x, caret.y, caret.x + 16 * 32, getheight() - texth() - metrics::border * 2 - 1);
+	picker(origin, current, ((sprite*)gui.object)->count, 32, icon_element);
+	clipping = push_clip;
+	caret.y += 32 + metrics::border + metrics::padding;
+}
+
+static void main_scene() {
 	if(false) {
 		paint_portraits();
 		caret.y += 32 + metrics::border + metrics::padding;
 	}
 	if(true) {
-		auto push_clip = clipping;
-		clipping.set(caret.x, caret.y, caret.x + 20 * 32, getheight() - texth() - metrics::border * 2 - 1);
+		gui.object = (void*)gres("tiles", "art/objects");
 		paint_monsters();
-		clipping = push_clip;
-		caret.y += 32 + metrics::border + metrics::padding;
 	}
-	clipping = push_clip;
 	paint_hilite();
 }
 
@@ -143,7 +155,7 @@ void main_util();
 
 int main(int argc, char *argv[]) {
 	main_util();
-	ui::callback::getstatus = getstatus;
+	callback::getstatus = getstatus;
 	return application(starting, 0);
 }
 

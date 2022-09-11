@@ -2,16 +2,16 @@
 #include "bsreq.h"
 #include "log.h"
 #include "variant.h"
-#include "ui.h"
-#include "ui_application.h"
+#include "draw.h"
+#include "draw_application.h"
 
-using namespace ui;
+using namespace draw;
 
 void set_dark_theme();
 void initialize_translation(const char* locale);
 void initialize_png();
 
-fnstatus ui::callback::getstatus;
+fnstatus draw::callback::getstatus;
 static rect statusbar_rect;
 
 static void menubutton(int index, const void* value, const char* text, fnevent press_event) {
@@ -20,7 +20,7 @@ static void menubutton(int index, const void* value, const char* text, fnevent p
 static void menubeforepaint() {
 }
 
-void ui::standart::beforemodal() {
+void draw::standart::beforemodal() {
 }
 
 static void statusbar() {
@@ -54,7 +54,7 @@ static void toolbar() {
 	strokeline();
 }
 
-void ui::standart::background() {
+void draw::standart::background() {
 	statusbar();
 	toolbar();
 	fillwindow();
@@ -77,15 +77,15 @@ static void show_statusbar() {
 	clipping = push_clip;
 }
 
-void ui::standart::tips() {
+void draw::standart::tips() {
 	show_statusbar();
 }
 
-void ui::standart::getstatus(const void* object, stringbuilder& sb) {
+void draw::standart::getstatus(const void* object, stringbuilder& sb) {
 	variant v = object;
 }
 
-int ui::application(fnevent proc, fnevent initializing) {
+int draw::application(fnevent proc, fnevent initializing) {
 	initialize_png();
 	if(!callback::getstatus)
 		callback::getstatus = standart::getstatus;
@@ -105,8 +105,8 @@ int ui::application(fnevent proc, fnevent initializing) {
 	metrics::padding = 4;
 	answers::paintcell = menubutton;
 	answers::beforepaint = menubeforepaint;
-	ui::width = 640;
-	ui::height = 360;
+	draw::width = 640;
+	draw::height = 360;
 	initialize(getnm("AppTitle"));
 	setnext(proc);
 	start();
